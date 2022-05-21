@@ -6,8 +6,8 @@ from django.shortcuts import render
 def storage_information_view(request):
 
     non_closed_visits = []
-    visits = Visit.objects.filter(leaved_at=None)
-    for visit in visits:
+    serialized = Visit.objects.filter(leaved_at=None)
+    for visit in serialized:
         seconds = visit.get_duration().total_seconds()
         formated_duration = f"{seconds // 3600} h {(seconds % 3600) // 60} min"
         non_closed_visits.append(
