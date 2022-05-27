@@ -5,12 +5,12 @@ from django.shortcuts import render
 
 def storage_information_view(request):
 
-    non_closed_serialized = []
-    serialized = Visit.objects.filter(leaved_at=None)
-    for visit in serialized:
+    non_closed_visits = []
+    serialized_visits = Visit.objects.filter(leaved_at=None)
+    for visit in serialized_visits:
         seconds = visit.get_duration().total_seconds()
         formated_duration = f"{seconds // 3600} h {(seconds % 3600) // 60} min"
-        non_closed_serialized.append(
+        non_closed_visits.append(
             {
                     'who_entered': visit.passcard,
                     'entered_at': visit.entered_at,
@@ -19,6 +19,6 @@ def storage_information_view(request):
         )
 
     context = {
-        'non_closed_visits': non_closed_serialized,
+        'non_closed_visits': non_closed_visits,
     }
     return render(request, 'storage_information.html', context)
