@@ -6,14 +6,14 @@ from django.shortcuts import render
 def passcard_info_view(request, passcode):
 
     passcard = Passcard.objects.get(passcode=passcode)
-    serialized_visits = Visit.objects.filter(passcard=passcard)
+    visits = Visit.objects.filter(passcard=passcard)
 
-    this_passcard_visits = []
+    serialized_visits = []
 
-    for visit in serialized_visits:
+    for visit in visits:
         seconds = visit.get_duration().total_seconds()
         formated_duration = f"{seconds // 3600} h {(seconds % 3600) // 60} min"
-        this_passcard_visits.append(
+        serialized_visits.append(
             {
                 'entered_at': visit.entered_at,
                 'duration': formated_duration,
@@ -23,6 +23,6 @@ def passcard_info_view(request, passcode):
 
     context = {
         'passcard': passcard,
-        'this_passcard_visits': this_passcard_visits
-    }
+        'this_passcard_visits': serialized_visits
+    } 
     return render(request, 'passcard_info.html', context)
